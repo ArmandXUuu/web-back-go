@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 	"web-back-go/pkg/consts"
 
@@ -69,9 +70,13 @@ func (app *App) init() {
 	fmt.Println(string(configb))
 
 	// DATABASE
+	tlsOption := "&tls=true"
+	if strings.HasPrefix(app.config.DBHostAddr, "localhost") {
+		tlsOption = ""
+	}
 	app.db = sqlx.MustConnect("mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/ziyixu-tech?parseTime=true&tls=true",
-			app.config.DBUsername, app.config.DBPassword, app.config.DBHostAddr))
+		fmt.Sprintf("%s:%s@tcp(%s)/ziyixu-tech?parseTime=true%s",
+			app.config.DBUsername, app.config.DBPassword, app.config.DBHostAddr, tlsOption))
 
 	// GIN Router
 	app.router = gin.Default()
