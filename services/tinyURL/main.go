@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 	"web-back-go/pkg/consts"
+	tinyURL "web-back-go/pkg/tinyURL"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -80,10 +81,25 @@ func (app *App) init() {
 
 	// GIN Router
 	app.router = gin.Default()
-	api := app.router.Group("/api", health)
+	api := app.router.Group("/api")
 	{
 		api.GET("/healthz", health)
+		api.GET("/testMD5", app.testMD5)
+
+		api.GET("/tinyURL/short", app.getShortCode)
+		api.GET("/tinyURL/base", app.getBaseURL)
+		api.GET("/tinyURL/list", app.listAllTinyURL)
 	}
 
 	app.router.GET("/health", health)
+}
+
+func (app *App) testMD5(c *gin.Context) {
+	inputString := c.DefaultQuery("input", "test_string")
+	log.Debugf("input string is %s", inputString)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "OK",
+		"MD5":    tinyURL.GeneragteMD5Value(inputString),
+	})
 }
