@@ -72,7 +72,7 @@ func (app *App) init() {
 
 	// DATABASE
 	tlsOption := "&tls=true"
-	if strings.HasPrefix(app.config.DBHostAddr, "localhost") {
+	if strings.HasPrefix(app.config.DBHostAddr, "localhost") || strings.HasPrefix(app.config.DBHostAddr, "mysql") {
 		tlsOption = ""
 	}
 	app.db = sqlx.MustConnect("mysql",
