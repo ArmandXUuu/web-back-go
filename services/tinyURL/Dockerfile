@@ -1,4 +1,4 @@
-FROM golang:1.19.0-alpine
+FROM golang:1.19.0-alpine as builder
 
 WORKDIR /web-back-go/
 
@@ -13,6 +13,14 @@ COPY services/tinyURL/* ./
 COPY pkg ./pkg/
 
 RUN go build -o /tinyURL
+
+
+FROM alpine
+
+COPY --from=builder /tinyURL /tinyURL
+COPY services/tinyURL/.env /.env
+
+RUN chmod +x /tinyURL
 
 EXPOSE 9234
 
