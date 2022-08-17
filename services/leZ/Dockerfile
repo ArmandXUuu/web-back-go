@@ -6,22 +6,22 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-COPY services/tinyURL/* ./
+COPY services/leZ/* ./
 
 
 # pkg
 COPY pkg ./pkg/
 
-RUN go build -o /tinyURL
+RUN go build -o /leZ
 
 
 FROM alpine
 
-COPY --from=builder /tinyURL /tinyURL
-COPY services/tinyURL/.env /.env
+COPY --from=builder /leZ /leZ
+COPY services/leZ/.env /.env
 
-RUN chmod +x /tinyURL
+RUN chmod +x /leZ
 
 EXPOSE 9234
 
-CMD ["/tinyURL"]
+CMD ["/leZ"]
