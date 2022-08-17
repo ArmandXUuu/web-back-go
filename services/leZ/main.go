@@ -89,6 +89,13 @@ func (app *App) init() {
 		api.GET("/tinyURL/short", app.getShortCode)
 		api.GET("/tinyURL/base", app.getBaseURL)
 		api.GET("/tinyURL/list", app.listAllTinyURL)
+
+		api.GET("/todo", app.getAllTodo)
+		api.GET("/todo/:id", app.getTodo)
+		api.POST("/todo", app.createTodo)
+		api.POST("/todo/:id", app.toggleTodo)
+		api.PATCH("/todo/:id", app.updateTodo)
+		api.DELETE("/todo/:id", app.deleteTodo)
 	}
 
 	app.router.GET("/health", health)
